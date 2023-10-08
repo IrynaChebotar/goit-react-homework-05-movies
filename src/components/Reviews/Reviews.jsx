@@ -1,22 +1,41 @@
-import React from 'react';
-import { ReviewsWrapper } from './Revievs.styled';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchReviewsMovie } from 'Api';
+import Error from 'components/Error/Error';
+import ReviewDetail from 'components/ReviewDetail/ReviewDetail';
 
-const Reviews = ({ reviews }) => (
-  <ReviewsWrapper>
-    <h2>Reviews</h2>
-    <ul>
-      {reviews && reviews.length > 0 ? (
-        reviews.map(review => (
-          <li key={review.id}>
-            <h3>{review.author}</h3>
-            <p>{review.content}</p>
-          </li>
-        ))
-      ) : (
-        <p>No reviews available</p>
+const Reviews = () => {
+  const [reviews, setReviews] = useState([]);
+  const { moviesId } = useParams();
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchReviews() {
+      try {
+        const respReviews = await fetchReviewsMovie(moviesId);
+        setReviews(respReviews.results);
+      } catch (error) {
+        console.error(error);
+        setError(true);
+      }
+    }
+    fetchReviews();
+  }, [moviesId]);
+
+  return (
+    <>
+      {error && <Error />}
+      {reviews && (
+        <div>
+          <ul>
+            {reviews.map((review, index) => (
+              <ReviewDetail key={index} review={review} />
+            ))}
+          </ul>
+        </div>
       )}
-    </ul>
-  </ReviewsWrapper>
-);
+    </>
+  );
+};
 
 export default Reviews;
