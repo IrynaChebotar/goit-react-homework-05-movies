@@ -8,7 +8,7 @@ import getPoster from 'getDefaultImg';
 import { AddInform, InformItems, BackLink } from './MovieDatail.styled';
 
 const MoviesDetailes = () => {
-  const { moviesId } = useParams();
+  const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(false);
   const location = useLocation();
@@ -16,7 +16,7 @@ const MoviesDetailes = () => {
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const respInformationAboutMovie = await fetchMoviesById(moviesId);
+        const respInformationAboutMovie = await fetchMoviesById(movieId);
         setMovie(respInformationAboutMovie);
       } catch (error) {
         console.error(error);
@@ -24,7 +24,7 @@ const MoviesDetailes = () => {
       }
     }
     fetchMovies();
-  }, [moviesId]);
+  }, [movieId]);
 
   const backLinkLocatinRef = useRef(location.state?.from ?? '/');
 

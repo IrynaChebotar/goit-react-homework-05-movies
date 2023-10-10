@@ -6,13 +6,13 @@ import ReviewDetail from 'components/ReviewDetail/ReviewDetail';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
-  const { moviesId } = useParams();
+  const { movieId } = useParams();
   const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchReviews() {
       try {
-        const respReviews = await fetchReviewsMovie(moviesId);
+        const respReviews = await fetchReviewsMovie(movieId);
         setReviews(respReviews.results);
       } catch (error) {
         console.error(error);
@@ -20,7 +20,7 @@ const Reviews = () => {
       }
     }
     fetchReviews();
-  }, [moviesId]);
+  }, [movieId]);
 
   return (
     <>
