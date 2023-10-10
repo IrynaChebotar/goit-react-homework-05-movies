@@ -1,31 +1,23 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
-import {
-  MovieImage,
-  MovieItem,
-  MoviesListContainer,
-  MovieTitle,
-  ReleaseDate,
-} from './MoviesList.styled';
+import { NavLink, useLocation } from 'react-router-dom';
+import { MoviesListContainer, MovieItem } from './MoviesList.styled';
 
-const MoviesList = ({ movies }) => (
-  <MoviesListContainer>
-    <h2>Movies</h2>
-    <ul>
-      {movies.map(movie => (
-        <Link to={`/movies/${movie.id}`}>
-          <MovieItem key={movie.id}>
-            <MovieImage
-              src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
-              alt={movie.title}
-            />
-            <MovieTitle>{movie.title}</MovieTitle>
-            <ReleaseDate>Release Date: {movie.release_date}</ReleaseDate>
-          </MovieItem>
-        </Link>
-      ))}
-    </ul>
-  </MoviesListContainer>
-);
+const MoviesList = ({ movies }) => {
+  const location = useLocation();
+  return (
+    <div>
+      <MoviesListContainer>
+        {movies.map(movie => {
+          return (
+            <MovieItem key={movie.id}>
+              <NavLink to={`/movies/${movie.id}`} state={{ from: location }}>
+                {movie.title}
+              </NavLink>
+            </MovieItem>
+          );
+        })}
+      </MoviesListContainer>
+    </div>
+  );
+};
 
 export default MoviesList;

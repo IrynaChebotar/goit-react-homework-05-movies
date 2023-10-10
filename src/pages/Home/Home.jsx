@@ -7,7 +7,6 @@ import { Loader } from 'components/Loader/Loader';
 const Home = () => {
   const [moviesData, setMoviesData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchMovies() {
@@ -16,7 +15,6 @@ const Home = () => {
         const response = await fetchTrendingMovies();
         setMoviesData(response.results);
       } catch (error) {
-        setError(error);
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -29,7 +27,6 @@ const Home = () => {
     <main>
       <h1>Trending today</h1>
       {isLoading && <Loader />}
-      {error && <p>Error: {error.message}</p>}
       <MoviesList movies={moviesData} />
     </main>
   );

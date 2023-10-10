@@ -1,71 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { fetchMoviesBySearch } from 'Api';
 import MoviesList from 'components/MoviesList/MoviesList';
-import { Loader } from 'components/Loader/Loader';
-import {
-  SearchContainer,
-  SearchForm,
-  SearchInput,
-  SearchButton,
-} from './Movies.styled';
+import { SearchInput } from './Movies.styled';
+import { BackLink } from 'pages/MovieDetails/MovieDatail.styled';
 
 const Movies = () => {
-  const navigate = useNavigate();
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSearchChange = e => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleSearchSubmit = e => {
-    e.preventDefault();
-    if (searchQuery.trim() === '') {
-      return;
-    }
-    navigate(`/movies?query=${searchQuery}`);
-  };
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('query');
+  const [valueSearchMovies, setValueSearchMovies] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!searchQuery) {
-        return;
-      }
+    if (!searchQuery) return;
 
-      setIsLoading(true);
-
+    async function searchMovies() {
       try {
         const resp = await fetchMoviesBySearch(searchQuery);
-        setSearchResults(resp.results);
+        setValueSearchMovies(resp.results);
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false);
       }
-    };
-
-    fetchData();
+    }
+    searchMovies();
   }, [searchQuery]);
 
+  const handleSubmitForm = e => {
+    e.preventDefault();
+    setSearchParams({ query: e.target.searchMovies.value });
+    e.target.reset();
+  };
+  const backLinkLocatinRef = useRef(location.state?.from ?? '/');
+
   return (
-    <main>
-      <h1>Search Movies</h1>
-      <SearchContainer>
-        <SearchForm onSubmit={handleSearchSubmit}>
+    <>
+      <BackLink to={backLinkLocatinRef.current}>&#8592; Go back</BackLink>
+      <h2>Search movies</h2>
+      <form onSubmit={handleSubmitForm}>
+        <label htmlFor="searchMovies">
           <SearchInput
+            id="searchMovies"
+            name="searchMovies"
             type="text"
-            placeholder="Search for a movie..."
-            value={searchQuery}
-            onChange={handleSearchChange}
+            autoComplete="off"
+            autoFocus
+            placeholder="Search movies for name..."
           />
-          <SearchButton type="submit">Search</SearchButton>
-        </SearchForm>
-      </SearchContainer>
-      {isLoading ? <Loader /> : <MoviesList movies={searchResults} />}
-    </main>
+        </label>
+      </form>
+      <MoviesList movies={valueSearchMovies} />
+    </>
   );
 };
 
