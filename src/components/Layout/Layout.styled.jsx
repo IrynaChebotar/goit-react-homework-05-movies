@@ -1,4 +1,21 @@
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
+
+export const Link = styled(NavLink)`
+  text-decoration: none;
+  text-align: center;
+
+  font-size: 28px;
+
+  font-weight: 700;
+  background-color: rgba(235, 186, 107, 0.3);
+  border-radius: 15px;
+  padding: 6px 8px;
+  &.active {
+    background-color: #9cedb1b8;
+  }
+`;
+
 export const PagesList = styled.ul`
   display: flex;
   flex-wrap: nowrap;
@@ -13,15 +30,6 @@ export const PagesList = styled.ul`
   padding: 0;
 `;
 export const PageItem = styled.li`
-  text-decoration: none;
-  text-align: center;
-
-  font-size: 28px;
-
-  font-weight: 700;
-  background-color: rgba(235, 186, 107, 0.3);
-  border-radius: 15px;
-  padding: 6px 8px;
   margin-left: 20px;
 `;
 

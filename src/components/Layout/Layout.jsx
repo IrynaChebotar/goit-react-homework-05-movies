@@ -1,7 +1,7 @@
 import { Loader } from 'components/Loader/Loader';
 import React, { Suspense } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { PageContainer, PagesList, PageItem } from './Layout.styled';
+import { Outlet, useLocation } from 'react-router-dom';
+import { PageContainer, PagesList, PageItem, Link } from './Layout.styled';
 
 const Layout = () => {
   const location = useLocation();
@@ -12,14 +12,14 @@ const Layout = () => {
         <nav>
           <PagesList>
             <PageItem>
-              <NavLink exact="true" to="/" state={{ from: location }}>
+              <Link exact="true" to="/" state={{ from: location }}>
                 Home page
-              </NavLink>
+              </Link>
             </PageItem>
             <PageItem>
-              <NavLink to="/movies" state={{ from: location }}>
+              <Link to="/movies" state={{ from: location }}>
                 Movies
-              </NavLink>
+              </Link>
             </PageItem>
           </PagesList>
         </nav>
